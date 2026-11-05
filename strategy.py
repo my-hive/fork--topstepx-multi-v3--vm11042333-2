@@ -32,7 +32,7 @@ def _run(h, l, c, sec, ts, starts, pv):
             continue
         atr = rng[t - ATR_N:t].mean()   # completed prior sessions only
         ma = close[max(0, t - TREND_N):t].mean()
-        d = 1 if close[t - 1] > ma else (-1 if close[t - 1] < ma else 0)
+        d = 1  # long-only control: equity premium without trend side
         if d == 0:
             continue
         stop = STOP_ATR * atr
