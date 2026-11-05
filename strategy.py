@@ -12,7 +12,7 @@ import numpy as np
 import numba
 
 TRADE = {'MNQ': 2.0}          # symbol: dollars per point
-RISK, STOP_ATR, ATR_N = 300.0, 1.0, 20
+RISK, STOP_ATR, ATR_N = 300.0, 0.15, 20
 
 
 @numba.njit(cache=True)
