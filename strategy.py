@@ -1,7 +1,7 @@
 """vm11042333-2: MNQ session trend hold.
 
-Mechanism: equity-index risk premium plus slow trend persistence. At the
-first bar of each CME session (17:00 CT) take side = sign(prior session close
+Mechanism: equity-index risk premium plus slow trend persistence. On the
+09:29 CT bar close (fill 09:30, after cash-open auction) take side = sign(prior session close
 - SMA of last TREND_N session closes) (min 20 sessions warmup). Exit on close
 beyond stop, close beyond TP_R x stop, data gap (evaluator flattens; no
 re-entry churn) or evaluator 15:10 flat. One entry per session.
@@ -14,6 +14,7 @@ import numba
 
 TRADE = {'MNQ': 2.0}          # symbol: dollars per point
 RISK, STOP_ATR, ATR_N, TP_R, TREND_N = 300.0, 0.15, 20, 6.0, 200
+ENTRY_SEC = 34140             # signal on 09:29 bar close => fills 09:30 open (US cash open)
 
 
 @numba.njit(cache=True)
@@ -43,7 +44,7 @@ def _run(h, l, c, sec, ts, starts, pv):
             if k > a and ts[k] - ts[k - 1] != 60:
                 pos, done = 0, True        # data gap: evaluator flattened
             if not done:
-                if pos == 0 and (sec[k] >= 61200 or sec[k] < 54000):
+                if pos == 0 and sec[k] == ENTRY_SEC:
                     pos, ref = d * q, c[k]     # fills next open; levels off signal close
                 elif pos != 0 and ((c[k] - ref) * d <= -stop or (c[k] - ref) * d >= TP_R * stop):
                     pos, done = 0, True
