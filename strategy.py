@@ -13,7 +13,7 @@ import numpy as np
 import numba
 
 TRADE = {'MNQ': 2.0}          # symbol: dollars per point
-RISK, STOP_ATR, ATR_N, TP_R, TREND_N = 300.0, 0.15, 20, 6.0, 200
+RISK, STOP_ATR, ATR_N, TP_R, TREND_N = 300.0, 0.15, 20, 1e9, 200
 ENTRY_SEC = 34140             # signal on 09:29 bar close => fills 09:30 open (US cash open)
 
 
